@@ -1,20 +1,23 @@
-package article;
+package com.KoreaIT.java.AM;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
-	static List<Article> articles;
+import com.KoreaIT.java.AM.dto.Article;
+import com.KoreaIT.java.AM.util.Util;
+
+public class App {
+	List<Article> articles;
 	
-	static {
+	public App() {
 		articles = new ArrayList<>();
 	} // 테스트용 데이터는 ArrayList에 미리 들어가서 프로그램 생성될 때 만들어져 있어야하는데 그걸 위해서 밑에 있는 ArrayList를 데리고 오는건 안좋은 방식.
 	//그리고 여기에 static 안붙이고 만들면 main 메소드는 static이므로 main에서 활용을 하지 않음. 그러니 일반생성자에서 static필드를 초기화 하는 방법인 static 블럭을 쓰는 것. 
 	
 	
 	
-	public static void main(String[] args) {
+	public void run() {
 		System.out.println("==프로그램 시작==");
 		
 		Scanner sc = new Scanner(System.in);
@@ -206,7 +209,7 @@ detail 할때 다른 학생이 제안한 방법
 		System.out.println("==프로그램 종료==");
 	}
 	//메소드 만들면 기본형이 void지만 이거 수정 안하면 리턴이 없어서 위에서 0이되. 주의!! 매번 수정을 안하네.
-	private static Article circuit(int id) {
+	private Article circuit(int id) {
 //		Article foundArticle = null;
 		for(int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
@@ -217,7 +220,7 @@ detail 할때 다른 학생이 제안한 방법
 		return null; //안 같으면 null을 해라고 그럼 메소드 불렀을때 null로 if문으로 판단할꺼고. if문이랑 적합하면 if문 실행할꺼고 아니면 밑에 내용 실행하겠지.
 	}
 
-	private static void makeTestData() {
+	private void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다");
 		
 		articles.add(new Article("test1", "test1",1, Util.getNowDateStr(),10));
@@ -226,39 +229,7 @@ detail 할때 다른 학생이 제안한 방법
 
 		
 	}	
-
-	
-	
 	
 }
 
 
-class Article{
-	int num;
-	String title;
-	String body;
-	String regDate;
-	int check;
-	
-	
-// 이거는 테스트용 데이터는 만들때 조회수도 만들어져 있으니 check=check에 인자도 들어가 있는거고. 
-	public Article(String title, String body, int num, String regDate, int check) { 
-		this.num = num;
-		this.title = title;
-		this.body = body;
-		this.regDate = regDate;
-		this.check = check; 
-	// test용 데이터가 아닐때 this.check = check 가 아닌 이유 : 위에 애들을 왜 연결했는지 알면 보임. 위에 애 딴 애들은 write. 즉 글을 만들면서 입력받은것(=기존에 없던것)이 연결되야하고. 조회수는 기존에 값이 있어야하고. 위에서 write할때마다 조회수 입력해주세요해서 엮을꺼면 몰라 그거 아니면 연결할 이유없고 당연히 0부터고.
-	//생성자는 이거 만들때 이거 한번 실행해 이므로 ()안에 check가 들어갈 이유가 없음. 
-	//위에 저놈들도 받아온걸로 안해도 되는데 안하면 모두가 똑같은 객체로 만들어지니까 그럼 의미가 없으니까 하는 것임.	
-	}
-//기존 mian메소드 안에 있는 내용을 저장하기 위해 쓰는 생성자. 여기는 만들때 조회수 0이어야하니까 0인거고.
-	public Article(String title, String body, int num, String regDate) {
-		this(title, body, num, regDate, 0); //이거는 무조건 생성자의 첫번째 줄에 존재해야함. 이건 무조건 지켜야함!!
-	//여기가 0인 이유는 test용 데이터가 아닐때 위의 내용이 this.check =0;인것과 동일.
-	//this();는 다른생성자한테 일 넘기는 애. 여기서는 static main 메소드 안의 article과 밖의 article이 생성자가 안맞는데(인자가 안맞음) 결국 위의 article 생성자가 하는 일을 써먹어야하니 떠넘기기.
-	//그래서 this();안에 위의 생성자 인자 내용이 들어간 것임.
-	//	
-	}
-	
-}
