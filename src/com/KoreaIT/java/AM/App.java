@@ -64,72 +64,79 @@ public class App {
 				articles.add(article);
 				
 				System.out.printf("%d번 글이 생성되었습니다.\n", num); 
-			
-		//		continue; //이거 없으면 컴터 입장에서는 내가 원망스러울 것. if가 분리 되어있으니. 밑에 해야하잖아. else로 연결되어있으면 몰라. 
-				//연결 안되어있으면 continue를 해서 쓸대 없는 연산을 안하게 하는게 컴터입장에서 좋은것임.
-		//	}
-			//여기서부터는 else if로 묶어버리는게 낫지만 지금 나의 레벨에서는 헷갈리므로. 일단 continue로 올리고 나중에 다 만들고 나면 수정을...
-		} else if(cmd.equals("article list")) {
+
+				
+/* 여기서부터는 리스트 검색어 내 생각.
+  				} else if(cmd.startsWith("article list ")) {
 				if(articles.size() == 0) {
 					System.out.println("게시글이 없습니다.");
 					continue;	
 				}
 				
-				System.out.println("번호	|	제목	|	날짜	|	조회수"); //여기 있으면 상단에 한번만 나오고 반복 안됨.
+				if(articles.size() != 0) {
+					String[] cmdBits = cmd.split(" ");
+					int id = Integer.parseInt(cmdBits[2]);
+					
+					if(id != articles.num) {
+				System.out.println("번호	|	제목	|	날짜	|	조회수"); 
 				for(int i = articles.size()-1; i >= 0; i--) {
-					Article article = articles.get(i);//-1을 여기다가 줘도 큰 상관은 없지만 그러면 i가 특정 조건을 물고 있는게 아니므로 그 조건을 문 변수를 쓸때 활용에 제약이 생김. 활용할때마다 일일이 i-1을 넣느니 이게 낫지.
-				//	System.out.println("번호	|	제목	"); 여기에 있으면 글들 사이에  번호랑 제목이 계속 나옴.
+					Article article = articles.get(i);
 					System.out.printf("%d	|	%s	|	%s	|	%d\n ", article.num, article.title, article.regDate, article.check );
 				}
+				if(id == articles.num) {
+					System.out.println("번호	|	제목	|	날짜	|	조회수"); 
+					for(int i = articles.size()-1; i >= 0; i--) {
+						Article article = articles.get(i);
+						System.out.printf("%d	|	%s	|	%s	|	%d\n ", article.num, article.title, article.regDate, article.check );
+					}
+				}
+					}
+				}
+<내 생각이 잘못된 이유>
+1. article list 뒤에 띄어쓰기를 했는데 명령어를 받을때 trim(공백제거)을 했기 때문에 article list만 쳤을때 존재하지 않는 명령어입니다로 넘어감. 
+=> 기존의 list도 안나온다는 뜻. 저 상태에서 기존의 list기능이 실행 되려면 article list 뒤에 공백하고 뭔가를 결국에는 적어야 기존 list 기능을 함.
+여기서 부터 오류가 나니 split을 써서 2번째 방(배열)에 있는걸 불러와서 비교하는게 다 불가하게 됨.
+*/				
 
-			 } else if(cmd.startsWith("article detail ")) {
+			} else if (cmd.equals("article list")) {
+
+				if (articles.size() == 0) {
+					System.out.println("게시글이 없습니다");
+					continue;
+				}
+
+				String searchKeyword = cmd.substring("article list".length()).trim();
+				//substring이 뭐하는 애인지 잘 서치해서 이해하면 뒤가 다 이해됨. 
+				List<Article> forPrintArticles = articles;
+				
+				if (searchKeyword.length() > 0) {
+					forPrintArticles = new ArrayList<>();
+					
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							forPrintArticles.add(article);
+						}
+					}
+					
+					if (forPrintArticles.size() == 0) {
+						System.out.println("검색결과가 없습니다");
+						continue;
+					}
+				}
+				
+				System.out.println("번호	|	제목		|		날짜		|	조회수	");
+
+				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+					Article article = forPrintArticles.get(i);
+					System.out.printf("%d	|	%s	|	%s	|	%d	\n", article.num, article.title, article.regDate,
+							article.check);
+				}	
+
+			} else if(cmd.startsWith("article detail ")) {
 				
 				String[] cmdBits = cmd.split(" ");//split이 String[](배열)이라서 그냥 String 넣으면 Type mismatch로 난리남.
 				//?? ?? = cmdbits.get(2); 이게 틀린이유 : 일단 쟤는 배열이지 list가 아니야. 지금 객체해서 막 연결하고 저장하고 그거 불러오는거 아니라고.
 				int id = Integer.parseInt(cmdBits[2]);//String 배열이었음 : 타입미스매치니까 수동 형변환 해야함. 이때 Integer.parseInt();를 쓰는 것임.
-
-/*				for(int i = articles.size()-1; i >= 0; i--) { //역시 같은거 찾기만 하면 되는거라 역순회든 정순회든 상관없구만.
-					//for(int i =0; i < articles.size(); i++) {
-						Article article = articles.get(i);
-					
-						if(article.num == id) {
-							System.out.println("==게시글 상세보기 ==");
-							System.out.printf("번호 : %d\n", article.num);
-							System.out.printf("제목 : %s\n", article.title);
-							System.out.printf("내용 : %s\n", article.body);
-						break; //이거 없으면 컴터가 맞는걸 찾고도 뒤에 남은 애들을 순회해야하니까. 컴터는 내가 원망스럽겠지.
-						} 	
-//아래의 %d번 게시글은 존재하지 않습니다는 내가 스스로 생각해서 만든 코드. 자랑스럽다! 근데 이게 좋은 방법인걸까?
-						if(articles.size()-1<id) {
-						System.out.printf("%d번 게시글은 존재하지 않습니다\n", id);
-						//이렇게 하면 %d번 게시글은 존재하지 않습니다 라고 뜸. 문제는 똑같은 글이 두줄 나와서 그렇지. 하하
-						break; //break를 만드니까 한번만 나오네. 근데 왜 없으면 두번 나오는거지? 아. 찾고나서 또 순회해서구나. 
-						//여기가 continue가 아니라 break를 쓴 이유 : for문 안이니까. continue 쓰면 for문 나가는게 아니라 또 순회하는건걸.
-						}
-*/						
-				//강사님이 사용하신 코드. 이게 내가한것보다 효율적인 이유.
-				//articles를 순회해서. 명령어에 입력된 글 번호값이랑 일치하는 글이 있는지 확인하는 작업을 detail에서만 하는거 아니니까.
-/* 아래의 강사님이 사용하신 코드 까지 가는 중간 과정. 이해를 위해 적어둠.
- 				boolean foundArticle = false;
-				for(int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-					
-					if(article.num == id) {
-						foundArticle =true;
-						break;
-					}
-				}
-				if(foundArticle == false) {
-					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
-					continue;
-				}
-				System.out.println("==게시글 상세보기 ==");
-				System.out.printf("번호 : %d\n", article.num);
-				System.out.printf("제목 : %s\n", article.title);
-				System.out.printf("내용 : %s\n", article.body);
-				이렇게 쓰면 article을 for문안에서 만들었으므로 게시글 상세보기는 for문 밖이기 때문에 사용할수 없다.
-				그래서 아래와 같은 작업을 한다.
-*/				
 
 				Article foundArticle = circuit(id);
 				
