@@ -127,24 +127,16 @@ public class Main {
 				이렇게 쓰면 article을 for문안에서 만들었으므로 게시글 상세보기는 for문 밖이기 때문에 사용할수 없다.
 				그래서 아래와 같은 작업을 한다.
 */				
-				Article foundArticle = null;
-				for(int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-					
-					if(article.num == id) {
-						foundArticle = article;
-//					check++;
-//					article.check = check;
-						article.check++; //위에 두줄은 아니야. 잘못된거야. 무슨 의도인지 아는데 그게 아니라 이거야.
-						
-						break;
-					}
-				}
+
+				Article foundArticle = circuit(id);
+				
 				//아래 if문이 없으면 null이 발생할수 있음. 왜냐면 null이어도 위로 올리는 행위를 안하니까.
 				if(foundArticle == null) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					continue; 
 				}
+				foundArticle.check++;
+				
 				System.out.println("==게시글 상세보기 ==");
 				System.out.printf("번호 : %d\n", foundArticle.num);
 				System.out.printf("제목 : %s\n", foundArticle.title);
@@ -161,19 +153,9 @@ detail 할때 다른 학생이 제안한 방법
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
-				Article foundArticle = null;
+				Article foundArticle = circuit(id);
 				
-				for(int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-					
-					if(article.num == id) {
-						foundArticle = article; //이건 없애면 안되! 지금 우리 밑에서 foundArticle에 null인지 아닌지로 판단한단다. 이걸 없애면 쟈는 뭘로 판단해.
-//					list.remove(id); : 우선 list가 아니야!! 없앨것(remove시킬것)이 list에 있는애가 아니잖아. 
-						System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
-						
-						break;
-					}
-				}
+
 				if(foundArticle == null) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					continue; 
@@ -186,17 +168,8 @@ detail 할때 다른 학생이 제안한 방법
 					String[] cmdBits = cmd.split(" ");
 					int id = Integer.parseInt(cmdBits[2]);
 	
-					Article foundArticle = null;
+					Article foundArticle = circuit(id);
 					
-					for(int i = 0; i < articles.size(); i++) {
-						Article article = articles.get(i);
-						
-						if(article.num == id) {
-							foundArticle = article;
-							
-							break;
-						}
-					}
 					if(foundArticle == null) {
 						System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 						continue; 
@@ -231,6 +204,17 @@ detail 할때 다른 학생이 제안한 방법
 		sc.close();
 		
 		System.out.println("==프로그램 종료==");
+	}
+	//메소드 만들면 기본형이 void지만 이거 수정 안하면 리턴이 없어서 위에서 0이되. 주의!! 매번 수정을 안하네.
+	private static Article circuit(int id) {
+//		Article foundArticle = null;
+		for(int i = 0; i < articles.size(); i++) {
+			Article article = articles.get(i);
+			if(article.num == id) {
+				return article; //id랑 article의 번호가 같으면 아티클 번호 리턴
+			}
+		}
+		return null; //안 같으면 null을 해라고 그럼 메소드 불렀을때 null로 if문으로 판단할꺼고. if문이랑 적합하면 if문 실행할꺼고 아니면 밑에 내용 실행하겠지.
 	}
 
 	private static void makeTestData() {
