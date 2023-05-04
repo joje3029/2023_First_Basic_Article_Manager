@@ -26,6 +26,7 @@ public class App{
 		
 		int num = 3; 
 		
+		
 		while(true) {
 
 			System.out.println("명령어를 입력해 주세요");
@@ -43,74 +44,46 @@ public class App{
 				break;
 			}
 
-/*			
 		if(cmd.equals("member join")) {
+			
 			String LogDate = Util.getNowDateStr();
-			
-			System.out.println("로그인 아이디 ) ");
-			String LogID = sc.nextLine();
-			
-			String LogPw = null;
+
+			String LogID = null;
+			boolean loginIdDupChk = false;
 			
 			while(true) {
-				System.out.println("로그인 비밀번호 ) ");
-				LogPw = sc.nextLine();
-				System.out.println("로그인 비밀번호 확인) ");
-				String LogPwCheck = sc.nextLine();
-				
-				if(LogPw.equals(LogPwCheck) == false) {
-					System.out.println("비밀번호가 맞지 않습니다.");
-					continue;
-				}
-			 break;
-			}			
-			
-			System.out.println("이름을 입력해 주세요)");
-				String name = sc.nextLine();
-
-				
-		
-			Member member = new Member (num, LogDate, LogID, LogPw, name);
-
-			members.add(member);
-			
-			System.out.printf("%s 회원님 환영합니다\n", name);
-*/			
-		if(cmd.equals("member join")) {
-			String LogDate = Util.getNowDateStr();
-			
 			System.out.println("로그인 아이디 ) ");
-			String LogID = sc.nextLine();
+			LogID = sc.nextLine();
 			
-			String LogPw = null;
-			
-//			while(true) {
-//				System.out.println("로그인 비밀번호 ) ");
-//				LogPw = sc.nextLine();
-//				System.out.println("로그인 비밀번호 확인) ");
-//				String LogPwCheck = sc.nextLine();
-//				
-//				if(LogPw.equals(LogPwCheck) == false) {
-//					System.out.println("비밀번호가 맞지 않습니다.");
-//					continue;
-//				}
-//			 break;
-//			}	
-//위의 무한반복 while문 for 문으로 바꿀때 이렇게 바꿀수 있음 			
-			for(int i=0 ; true ; i++) {
-		//	for(;;){	이것도 for문 반복문임. 
-				System.out.println("로그인 비밀번호 ) ");
-				LogPw = sc.nextLine();
-				System.out.println("로그인 비밀번호 확인) ");
-				String LogPwCheck = sc.nextLine();
-				
-				if(LogPw.equals(LogPwCheck) == false) {
-					System.out.println("비밀번호가 맞지 않습니다.");
-					continue;
-				}
-			 break;
+			for(Member member :members) {
+			if(LogID.equals(member.LogID)) {
+			System.out.println("이미 존재하는 아이디다.");
+				loginIdDupChk = true;
+				break;
+			}
+		}	
+		
+			if(loginIdDupChk == false) {
+				System.out.println("사용가능함.");
+				break;
 			}
 			
+		}	
+			
+		String LogPw = null;
+		
+		while(true) {
+				System.out.println("로그인 비밀번호 ) ");
+				LogPw = sc.nextLine();
+				System.out.println("로그인 비밀번호 확인) ");
+				String LogPwCheck = sc.nextLine();
+				
+				if(LogPw.equals(LogPwCheck) == false) {
+					System.out.println("비밀번호가 맞지 않습니다.");
+					continue;
+				}
+			 break;
+			}	
 			
 			System.out.println("이름을 입력해 주세요)");
 				String name = sc.nextLine();
@@ -122,6 +95,15 @@ public class App{
 			members.add(member);
 			
 			System.out.printf("%s 회원님 환영합니다\n", name);
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			}else if(cmd.equals("article write")) {
 				num++;
