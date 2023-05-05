@@ -55,6 +55,7 @@ public class App{
 			LogID = sc.nextLine();
 
 //			내가 짠 아이디 중복 코드. 중복 구분까지는 하는데 반복을 안함. 아래의 Private 메소드도 그렇고 어딘가 잘못 된듯.
+//원인 찾음. private 메소드에서 ==로 비교해서 문제임. 문자열인데. equals를 안쓰고 == 써서.  
 			Member foundMember = getByMemberID(LogID); 
 			
 			if(foundMember != null) {
@@ -233,7 +234,9 @@ public class App{
 	private Member getByMemberID(String LogID) {
 		for(int i = 0; i < members.size(); i++) {
 			Member member = members.get(i);
-			if(member.LogID==LogID) {
+//			if(member.LogID==LogID) { 문제의 그 코드
+//			if(LogID.equals(member.LogID)){ 아래랑 같은거 
+			if(member.LogID.equals(LogID)) {
 				return member; 
 				}
 		}
