@@ -22,6 +22,7 @@ public class App{
 		
 		Scanner sc = new Scanner(System.in);
 		
+		makeMemberTestData();
 		makeTestData();
 		
 		int num = 3; 
@@ -241,6 +242,7 @@ public class App{
 				}
 		}
 		return null; 
+//그냥 기존에 코드 있으니까 이거 활용해서 쓴거 맞는데. 위의 Article과 달리 member는 return해서 활용이 아니라 단순 비교이기 때문에 Member 타입이 아니라 boolen으로 해서 단순 비교해도 됨.
 	}
 	
 	private void makeTestData() {
@@ -250,8 +252,16 @@ public class App{
 		articles.add(new Article("test2", "test2",2, Util.getNowDateStr(),15));
 		articles.add(new Article("test3", "test3",3, Util.getNowDateStr(),28));
 
-		
 	}	
+	
+	private void makeMemberTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다");
+
+		members.add(new Member(1, Util.getNowDateStr(), "1번 회원", "123", "1번씨"));
+		members.add(new Member(2, Util.getNowDateStr(), "2번 회원", "123", "2번씨"));
+		members.add(new Member(3, Util.getNowDateStr(), "3번 회원", "123", "3번씨"));
+	}	
+	
 	
 }
 

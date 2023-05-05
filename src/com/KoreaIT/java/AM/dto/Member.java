@@ -15,4 +15,8 @@ public class Member {
 			this.name = name;
 		
 	}
+		
+//		public Member(String title, String body, int num, String regDate) {
+//			this(title, body, num, regDate, 0); 
+//		}
 }
