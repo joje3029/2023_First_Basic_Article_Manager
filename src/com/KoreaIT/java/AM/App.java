@@ -44,68 +44,56 @@ public class App{
 				break;
 			}
 
+		
 		if(cmd.equals("member join")) {
-			
 			String LogDate = Util.getNowDateStr();
-
-			String LogID = null;
-			boolean loginIdDupChk = false;
 			
+			String LogID = null;
+
 			while(true) {
 			System.out.println("로그인 아이디 ) ");
 			LogID = sc.nextLine();
+
+//			내가 짠 아이디 중복 코드. 중복 구분까지는 하는데 반복을 안함. 아래의 Private 메소드도 그렇고 어딘가 잘못 된듯.
+			Member foundMember = getByMemberID(LogID); 
 			
-			for(Member member :members) {
-			if(LogID.equals(member.LogID)) {
-			System.out.println("이미 존재하는 아이디다.");
-				loginIdDupChk = true;
-				break;
+			if(foundMember != null) {
+				System.out.println("아이디는 존재 합니다."); 
+
+				continue; 
 			}
-		}	
-		
-			if(loginIdDupChk == false) {
-				System.out.println("사용가능함.");
-				break;
-			}
+			break;
+		}
 			
-		}	
+			String LogPw = null;
 			
-		String LogPw = null;
-		
-		while(true) {
-				System.out.println("로그인 비밀번호 ) ");
-				LogPw = sc.nextLine();
-				System.out.println("로그인 비밀번호 확인) ");
-				String LogPwCheck = sc.nextLine();
+			while(true) {
+					System.out.println("로그인 비밀번호 ) ");
+					LogPw = sc.nextLine();
+					System.out.println("로그인 비밀번호 확인) ");
+					String LogPwCheck = sc.nextLine();
+					
+					if(LogPw.equals(LogPwCheck) == false) {
+						System.out.println("비밀번호가 맞지 않습니다.");
+						continue;
+					}
+				 break;
+				}	
 				
-				if(LogPw.equals(LogPwCheck) == false) {
-					System.out.println("비밀번호가 맞지 않습니다.");
-					continue;
-				}
-			 break;
-			}	
-			
-			System.out.println("이름을 입력해 주세요)");
+				System.out.println("이름을 입력해 주세요)");
 				String name = sc.nextLine();
+			
+				Member member = new Member(num, LogDate, LogID, LogPw, name);	
 
+				members.add(member);
 				
-		
-			Member member = new Member (num, LogDate, LogID, LogPw, name);
-
-			members.add(member);
-			
-			System.out.printf("%s 회원님 환영합니다\n", name);
+				System.out.printf("%s 회원님 환영합니다\n", name);
 			
 			
 			
 			
 			
-			
-			
-			
-			
-			
-			}else if(cmd.equals("article write")) {
+			}	 else if(cmd.equals("article write")) {
 				num++;
 				String regDate = Util.getNowDateStr();
 				System.out.println("제목 ) ");
@@ -139,9 +127,6 @@ public class App{
 							forPrintArticles.add(article);
 						}
 					}
-					
-					
-					
 					
 					if (forPrintArticles.size() == 0) {
 						System.out.println("검색결과가 없습니다");
@@ -245,6 +230,16 @@ public class App{
 		return null; //안 같으면 null을 해라고 그럼 메소드 불렀을때 null로 if문으로 판단할꺼고. if문이랑 적합하면 if문 실행할꺼고 아니면 밑에 내용 실행하겠지.
 	}
 
+	private Member getByMemberID(String LogID) {
+		for(int i = 0; i < members.size(); i++) {
+			Member member = members.get(i);
+			if(member.LogID==LogID) {
+				return member; 
+				}
+		}
+		return null; 
+	}
+	
 	private void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다");
 		
