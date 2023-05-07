@@ -9,12 +9,14 @@ import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
 public class App{
-	List<Article> articles;
-	List<Member> members;
+	private List<Article> articles;
+	private List<Member> members;
+	private Member loginedMember;
 	
 	public App() {
 		articles = new ArrayList<>();
 		members = new ArrayList<>();
+		loginedMember = null;
 }	
 
 	public void run() {
@@ -47,6 +49,12 @@ public class App{
 
 		
 		if(cmd.equals("member join")) {
+			
+			if(loginedMember != null) {
+				System.out.println("로그아웃 후 이용해주세요.");
+				continue; 
+			}
+			
 			String LogDate = Util.getNowDateStr();
 			
 			String LogID = null;
@@ -91,10 +99,46 @@ public class App{
 				
 				System.out.printf("%s 회원님 환영합니다\n", name);
 			
+			}	 else if(cmd.equals("member login")) {
+				
+				if(loginedMember != null) {
+					System.out.println("이미 로그인 되어 있습니다.");
+					continue; 
+				}
+				
+				System.out.println("로그인 아이디 ) ");
+				String LogID = sc.nextLine();
+				System.out.println("로그인 비밀번호 ) ");
+				String LogPw = sc.nextLine();
+				
+				Member foundMember = getByMemberID(LogID); 
+				
+				if(foundMember == null) {
+					System.out.println("존재하지 않는 회원입니다."); 
+
+					continue; 
+				}
+				
+				if(LogPw.equals(foundMember.LogPw) == false) {
+					System.out.println("비밀번호를 확인해주세요."); 
+
+					continue; 
+				}
+
+				this.loginedMember = foundMember;
+				System.out.println("회원님 환영합니다.");
 			
-			
-			
-			
+				
+			}	 else if(cmd.equals("member logout")) {	
+		
+				if(loginedMember == null) {
+					System.out.println("로그인 상태가 아닙니다.");
+					continue; 
+				}
+				
+				loginedMember = null;
+				System.out.println("로그아웃 되었습니다.");
+				
 			}	 else if(cmd.equals("article write")) {
 				num++;
 				String regDate = Util.getNowDateStr();
@@ -257,12 +301,13 @@ public class App{
 	private void makeMemberTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다");
 
-		members.add(new Member(1, Util.getNowDateStr(), "1번 회원", "123", "1번씨"));
-		members.add(new Member(2, Util.getNowDateStr(), "2번 회원", "123", "2번씨"));
-		members.add(new Member(3, Util.getNowDateStr(), "3번 회원", "123", "3번씨"));
+		members.add(new Member(1, Util.getNowDateStr(), "test1", "test1", "test1"));
+		members.add(new Member(2, Util.getNowDateStr(), "test2", "test2", "test2"));
+		members.add(new Member(3, Util.getNowDateStr(), "test3", "test3", "test3"));
 	}	
 	
-	
 }
+
+
 
 
